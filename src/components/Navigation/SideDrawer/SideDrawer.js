@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { Fragment } from "react";
 
-import Logo from '../../Logo/Logo';
-import NavigationItems from '../NavigationItems/NavigationItems';
-import classes from './SideDrawer.module.css';
+import Logo from "../../Logo/Logo";
+import NavigationItems from "../NavigationItems/NavigationItems";
+import classes from "./SideDrawer.module.css";
+import Backdrop from "../../UI/Backdrop/Backdrop";
 
 const SideDrawer = (props) => {
-  // ...
-  return (
-    <div className={classes.SideDrawer}>
-      <Logo height="11%" marginBottom="32px"/>
-      <nav>
-        <NavigationItems />
-      </nav>
-    </div>
+  const showClass = props.show ? classes.Open : classes.Close;
 
+  return (
+    <Fragment>
+      <Backdrop show={props.show} modalClosed={props.modalClosed} />
+      <div className={classes.SideDrawer + " " + showClass}>
+        <Logo height="11%" marginBottom="32px" />
+        <nav>
+          <NavigationItems />
+        </nav>
+      </div>
+    </Fragment>
   );
 };
 
