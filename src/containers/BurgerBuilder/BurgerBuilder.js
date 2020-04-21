@@ -26,8 +26,21 @@ class BurgerBuilder extends Component {
   };
 
   componentDidMount() {
+    if(this.props.location.search) {
+    const ingredients = this.props.location.search
+      .substr(1)
+      .split("&")
+      .map((item) => item.split("="))
+      .reduce((acc, item) => {
+        acc[item[0]] = parseInt(item[1],0);
+        return acc;
+      }, {});
+      this.setState({ingredients});
+      return;
+    }
+
     axios
-      .get("/ingredients.json")
+      .get("/ingredients.json ")
       .then((res) => {
         let firebaseIngredients = res.data;
         const ingredients = {};
@@ -82,33 +95,35 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = (btnType) => {
-    this.setState({ loading: true });
+    this.props.history.push("/checkout", this.state.ingredients);
 
-    // firebase endpoint, so use .json extension
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Greg Larsen",
-        address: {
-          street: "123 Somewhere St.",
-          city: "Durham",
-          state: "NC",
-          zip: "12345",
-          country: "United States",
-        },
-        email: "test@test.com",
-      },
-      deliveryMethod: "fedex ground",
-    };
-    axios
-      .post("/orders.jso", order)
-      .then((response) => {
-        this.setState({ loading: false, purchasing: false });
-      })
-      .catch((error) => {
-        this.setState({ loading: false, purchasing: false });
-      });
+    // this.setState({ loading: true });
+    // // firebase endpoint, so use .json extension
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: "Greg Larsen",
+    //     address: {
+    //       street: "123 Somewhere St.",
+    //       city: "Durham",
+    //       state: "NC",
+    //       zip: "12345",
+    //       country: "United States",
+    //     },
+    //     email: "test@test.com",
+    //   },
+    //   deliveryMethod: "fedex ground",
+    // };
+    // axios
+    //   .post("/orders.json", order)
+    //   .then((response) => {
+    //     this.setState({ loading: false, purchasing: false });
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ loading: false, purchasing: false });
+    //     this.props.err(true, error.message);
+    //   });
   };
 
   render() {
