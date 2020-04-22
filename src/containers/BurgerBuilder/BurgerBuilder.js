@@ -26,16 +26,19 @@ class BurgerBuilder extends Component {
   };
 
   componentDidMount() {
-    if(this.props.location.search) {
-    const ingredients = this.props.location.search
-      .substr(1)
-      .split("&")
-      .map((item) => item.split("="))
-      .reduce((acc, item) => {
-        acc[item[0]] = parseInt(item[1],0);
-        return acc;
-      }, {});
-      this.setState({ingredients});
+
+    if (this.props.location.search && this.props.location.state) {
+      const ingredients = this.props.location.search
+        .substr(1)
+        .split("&")
+        .map((item) => item.split("="))
+        .reduce((acc, item) => {
+          acc[item[0]] = parseInt(item[1], 0);
+          return acc;
+        }, {});
+      
+      this.setState({ ingredients, totalPrice: parseFloat(this.props.location.state) });
+
       return;
     }
 
@@ -95,7 +98,10 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = (btnType) => {
-    this.props.history.push("/checkout", this.state.ingredients);
+    this.props.history.push("/checkout", {
+      ingredients: this.state.ingredients,
+      totalPrice: this.state.totalPrice,
+    });
 
     // this.setState({ loading: true });
     // // firebase endpoint, so use .json extension

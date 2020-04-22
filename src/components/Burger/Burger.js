@@ -6,7 +6,7 @@ import classes from "./Burger.module.css";
 const Burger = (props) => {
   let ingredients = null; 
 
-  const ingredientSum = Object.values(props.ingredients).reduce((acc, curr) => {
+  const ingredientSum = Object.values(props.ingredients || []).reduce((acc, curr) => {
     return acc + curr;
   }, 0);
 
