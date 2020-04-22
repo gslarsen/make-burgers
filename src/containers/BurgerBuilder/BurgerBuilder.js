@@ -98,38 +98,11 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = (btnType) => {
+    // go to /checkout and pass props: ingredients and totalPrice
     this.props.history.push("/checkout", {
       ingredients: this.state.ingredients,
       totalPrice: this.state.totalPrice,
     });
-
-    // this.setState({ loading: true });
-    // // firebase endpoint, so use .json extension
-    // const order = {
-    //   ingredients: this.state.ingredients,
-    //   price: this.state.totalPrice,
-    //   customer: {
-    //     name: "Greg Larsen",
-    //     address: {
-    //       street: "123 Somewhere St.",
-    //       city: "Durham",
-    //       state: "NC",
-    //       zip: "12345",
-    //       country: "United States",
-    //     },
-    //     email: "test@test.com",
-    //   },
-    //   deliveryMethod: "fedex ground",
-    // };
-    // axios
-    //   .post("/orders.json", order)
-    //   .then((response) => {
-    //     this.setState({ loading: false, purchasing: false });
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ loading: false, purchasing: false });
-    //     this.props.err(true, error.message);
-    //   });
   };
 
   render() {
