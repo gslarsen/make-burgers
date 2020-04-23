@@ -7,6 +7,9 @@ import axios from "../../../axios-orders";
 import Input from "../../../components/UI/Input/Input";
 
 class ContactData extends Component {
+  // this state is a template to enable form creation and holds the 'value' for each item in the order form,
+  // updated on changes, and the value for loading, which is changed upon order submission
+  
   state = {
     orderForm: {
       name: {
@@ -74,82 +77,18 @@ class ContactData extends Component {
 
   orderHandler = (e) => {
     e.preventDefault();
-    console.dir(e.target.parentElement);
-    // get customer Input from form
-    const customer = {
-      name: {
-        elementType: "input",
-        elementConfig: {
-          type: "text",
-          label: "Name",
-          name: "name",
-          placeholder: "Your Name",
-        },
-        value: e.target.parentElement.elements["name"].value,
-      },
-      email: {
-        elementType: "input",
-        elementConfig: {
-          type: "email",
-          label: "Email",
-          name: "email",
-          placeholder: "Your email",
-        },
-        value: e.target.parentElement.elements["email"].value,
-      },
-      street: {
-        elementType: "input",
-        elementConfig: {
-          type: "text",
-          label: "Street",
-          name: "street",
-          placeholder: "Street",
-        },
-        value: e.target.parentElement.elements["street"].value,
-      },
-      postal: {
-        elementType: "input",
-        elementConfig: {
-          type: "text",
-          label: "Postal Code",
-          name: "postal",
-          placeholder: "Postal Code",
-        },
-        value: e.target.parentElement.elements["postal"].value,
-      },
-      country: {
-        elementType: "input",
-        elementConfig: {
-          type: "text",
-          label: "Country",
-          name: "country",
-          placeholder: "Country",
-        },
-        value: e.target.parentElement.elements["country"].value,
-      },
-      delivery: {
-        elementType: "select",
-        elementConfig: {
-          options: [{ name: "standard", displayValue: "Standard" }, { name: "overnight", displayValue: "Overnight" }],
-          label: "Delivery Method",
-          name: "delivery",
-        },
-        value: e.target.parentElement.elements["delivery"].value,
-      }
-    };
-
-    // this.setState({ orderForm: customer });
+  
     this.submitOrder({
       customer: {
-        name: customer.name.value,
-        email: customer.email.value,
-        street: customer.street.value,
-        postal: customer.postal.value,
-        country: customer.country.value
+        name: this.state.orderForm.name.value,
+        email: this.state.orderForm.email.value,
+        street: this.state.orderForm.street.value,
+        postal: this.state.orderForm.postal.value,
+        country: this.state.orderForm.country.value
       },
       totalPrice: this.props.totalPrice,
       ingredients: this.props.ingredients,
-      deliveryMethod: customer.delivery.value
+      deliveryMethod: this.state.orderForm.delivery.value
     });
   };
 
