@@ -39,7 +39,7 @@ class ContactData extends Component {
         },
         value: "",
       },
-      postalCode: {
+      postal: {
         elementType: "input",
         elementConfig: {
           type: "text",
@@ -59,14 +59,14 @@ class ContactData extends Component {
         },
         value: "",
       },
-      deliveryMethod: {
+      delivery: {
         elementType: "select",
         elementConfig: {
           options: [{ name: "standard", displayValue: "Standard" }, { name: "overnight", displayValue: "Overnight" }],
           label: "Delivery Method",
           name: "delivery",
         },
-        value: "",
+        value: "Standard",
       }
     },
     loading: false,
@@ -78,66 +78,78 @@ class ContactData extends Component {
     // get customer Input from form
     const customer = {
       name: {
-        elementType: e.target.parentElement.elements["name"].localName,
+        elementType: "input",
         elementConfig: {
-          type: e.target.parentElement.elements["name"].type,
-          placeholder: e.target.parentElement.elements["name"].placeholder,
+          type: "text",
+          label: "Name",
+          name: "name",
+          placeholder: "Your Name",
         },
         value: e.target.parentElement.elements["name"].value,
       },
       email: {
-        elementType: e.target.parentElement.elements["email"].localName,
+        elementType: "input",
         elementConfig: {
-          type: e.target.parentElement.elements["email"].type,
-          placeholder: e.target.parentElement.elements["email"].placeholder,
+          type: "email",
+          label: "Email",
+          name: "email",
+          placeholder: "Your email",
         },
         value: e.target.parentElement.elements["email"].value,
       },
       street: {
-        elementType: e.target.parentElement.elements["street"].localName,
+        elementType: "input",
         elementConfig: {
-          type: e.target.parentElement.elements["street"].type,
-          placeholder: e.target.parentElement.elements["street"].placeholder,
+          type: "text",
+          label: "Street",
+          name: "street",
+          placeholder: "Street",
         },
         value: e.target.parentElement.elements["street"].value,
       },
-      postalCode: {
-        elementType: e.target.parentElement.elements["postal"].localName,
+      postal: {
+        elementType: "input",
         elementConfig: {
-          type: e.target.parentElement.elements["postal"].type,
-          placeholder: e.target.parentElement.elements["postal"].placeholder,
+          type: "text",
+          label: "Postal Code",
+          name: "postal",
+          placeholder: "Postal Code",
         },
         value: e.target.parentElement.elements["postal"].value,
       },
       country: {
-        elementType: e.target.parentElement.elements["country"].localName,
+        elementType: "input",
         elementConfig: {
-          type: e.target.parentElement.elements["country"].type,
-          placeholder: e.target.parentElement.elements["country"].placeholder,
+          type: "text",
+          label: "Country",
+          name: "country",
+          placeholder: "Country",
         },
         value: e.target.parentElement.elements["country"].value,
       },
-      deliveryMethod: {
-        elementType: e.target.parentElement.elements["delivery"].localName,
+      delivery: {
+        elementType: "select",
         elementConfig: {
-          options: [{ value: "standard", displayValue: "Standard" }, { value: "overnight", displayValue: "Overnight" }],
+          options: [{ name: "standard", displayValue: "Standard" }, { name: "overnight", displayValue: "Overnight" }],
+          label: "Delivery Method",
+          name: "delivery",
         },
         value: e.target.parentElement.elements["delivery"].value,
       }
     };
 
-    this.setState({ orderForm: customer });
+    // this.setState({ orderForm: customer });
     this.submitOrder({
       customer: {
         name: customer.name.value,
         email: customer.email.value,
         street: customer.street.value,
-        postal: customer.postalCode.value,
+        postal: customer.postal.value,
         country: customer.country.value
       },
       totalPrice: this.props.totalPrice,
       ingredients: this.props.ingredients,
-      deliveryMethod: customer.deliveryMethod.value
+      deliveryMethod: customer.delivery.value
     });
   };
 
@@ -157,56 +169,22 @@ class ContactData extends Component {
       });
   };
 
+  inputChangedHandler = (e) => {
+    const newOrderForm = {...this.state.orderForm};
+    newOrderForm[e.target.name].value = e.target.value;
+    this.setState({newOrderForm});
+  }
+
   render() {
     // console.log('ContactData props:', this.props)
     let formInputs = Object.values(this.state.orderForm).map(element => {
-      return <Input key={element.elementConfig.name} elementType={element.elementType} elementConfig={element.elementConfig}/>
+      return <Input key={element.elementConfig.name} elementType={element.elementType} elementConfig={element.elementConfig} changed={this.inputChangedHandler}/>
     });
 
     let output = (
       <div className={classes.ContactData}>
         <h4>Enter your contact info</h4>
         <form>
-
-          {/*<Input
-            inputtype="input"
-            label="Name"
-            type="text"
-            name="name"
-            placeholder="Your Name"
-          />
-          <Input
-            inputtype="input"
-            label="email"
-            type="email"
-            name="email"
-            placeholder="Your email"
-          />
-          <Input
-            inputtype="input"
-            label="Street"
-            type="text"
-            name="street"
-            placeholder="Street"
-          />
-          <Input
-            inputtype="input"
-            label="Postal Code"
-            type="text"
-            name="postal"
-            placeholder="Postal Code"
-          />
-          <Input
-            inputtype="input"
-            label="Country"
-            type="text"
-            name="country"
-            placeholder="Country"
-          />
-          <Input inputtype="select" label="Delivery Method" name="delivery">
-            <option name="standard">Standard</option>
-            <option name="overnight">Overnight</option>
-          </Input>*/}
           {formInputs}
           <Button btnType="Success" clicked={this.orderHandler}>
             ORDER
