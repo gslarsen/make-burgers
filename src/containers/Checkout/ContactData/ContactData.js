@@ -9,7 +9,7 @@ import Input from "../../../components/UI/Input/Input";
 class ContactData extends Component {
   // this state is a template to enable form creation and holds the 'value' for each item in the order form,
   // updated on changes, and the value for loading, which is changed upon order submission
-  
+
   state = {
     orderForm: {
       name: {
@@ -109,9 +109,9 @@ class ContactData extends Component {
   };
 
   inputChangedHandler = (e) => {
-    const newOrderForm = {...this.state.orderForm};
-    newOrderForm[e.target.name].value = e.target.value;
-    this.setState({newOrderForm});
+    const orderForm = {...this.state.orderForm};
+    orderForm[e.target.name].value = e.target.value;
+    this.setState({orderForm});
   }
 
   render() {
