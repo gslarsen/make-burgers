@@ -177,7 +177,15 @@ class ContactData extends Component {
   };
 
   render() {
-    // console.log('ContactData props:', this.props)
+    const invalidOrderFormEntries = Object.values(this.state.orderForm)
+      .map((element) => {
+        return [element.elementConfig.name, element.valid];
+      }).filter(element => element[1] === false);
+    
+    let buttonType = 'Success';
+    let buttonDisabled = invalidOrderFormEntries.length === 0 ? false : true; 
+    if (buttonDisabled) buttonType = 'Disabled';
+    
     let formInputs = Object.values(this.state.orderForm).map((element) => {
       return (
         <Input
@@ -197,7 +205,7 @@ class ContactData extends Component {
         <h4>Enter your contact info</h4>
         <form onSubmit={this.orderHandler}>
           {formInputs}
-          <Button btnType="Success" clicked={() => {}}>
+          <Button btnType={buttonType} clicked={() => {}} disabled={buttonDisabled}>
             ORDER
           </Button>
         </form>

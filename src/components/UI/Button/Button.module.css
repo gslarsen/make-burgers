@@ -22,3 +22,11 @@
 .Danger {
   color: #944317;
 }
+
+.Disabled {
+  color: #ccc;
+}
+
+.Disabled:hover {
+  cursor: no-drop;  
+}

@@ -8,9 +8,10 @@ const Input = (props) => {
   let validationError = null;
   
   if (props.invalid && props.touched ) {
+    
     inputClasses.push(classes.Invalid);
 
-    if (props.elementConfig.name !== 'postal') validationError = <p className={classes.ValidationError}>Please enter an alphanumeric item</p>
+    if (props.elementConfig.name !== 'postal' && props.elementConfig.name !== 'delivery') validationError = <p className={classes.ValidationError}>Please enter an alphanumeric item</p>
   }
 
   switch (props.elementType) {
