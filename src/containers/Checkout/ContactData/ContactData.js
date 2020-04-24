@@ -5,7 +5,6 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import Input from "../../../components/UI/Input/Input";
-import Modal from '../../../components/UI/Modal/Modal';
 
 class ContactData extends Component {
   // this state is a template to enable form creation and holds the 'value' for each item in the order form,
@@ -26,6 +25,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
+        touched: false
       },
       email: {
         elementType: "input",
@@ -40,6 +40,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
+        touched: false
       },
       street: {
         elementType: "input",
@@ -54,6 +55,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
+        touched: false
       },
       postal: {
         elementType: "input",
@@ -70,6 +72,7 @@ class ContactData extends Component {
           maxLength: 7
         },
         valid: false,
+        touched: false
       },
       country: {
         elementType: "input",
@@ -84,6 +87,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
+        touched: false
       },
       delivery: {
         elementType: "select",
@@ -111,18 +115,7 @@ class ContactData extends Component {
     
     const invalidOrderFormEntries = orderFormEntryValidity.filter(element => element[1] === false);
 
-    console.log(invalidOrderFormEntries)
-    if (invalidOrderFormEntries.length > 0) {
-      const invalidElements = invalidOrderFormEntries.map(element => element[0]);
-
-      let alertString = '';
-      invalidElements.forEach((element, idx) => {
-        if (idx > 0) alertString += `, ${element}`;
-        else alertString += element;
-      })
-
-      return alert(`Please correct ${alertString}`)
-    } 
+    if (invalidOrderFormEntries.length > 0) return;
 
     else this.submitOrder({
       customer: {
@@ -158,6 +151,7 @@ class ContactData extends Component {
     //note this is not a deep clone -> see the state.orderForm[e.target.name].elementConfig, but we're only setting state on the value property here.
     const orderForm = { ...this.state.orderForm };
     orderForm[e.target.name].value = e.target.value;
+    orderForm[e.target.name].touched = true;
 
     if (e.target.name !== "delivery") {
       const isValid = this.checkValidity(
@@ -192,6 +186,8 @@ class ContactData extends Component {
           elementConfig={element.elementConfig}
           validation={element.validation}
           changed={this.inputChangedHandler}
+          invalid={!element.valid}
+          touched={element.touched}
         />
       );
     });

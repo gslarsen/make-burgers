@@ -4,12 +4,21 @@ import classes from "./Input.module.css";
 
 const Input = (props) => {
   let inputElement = null;
+  const inputClasses = [classes.InputElement];
+  let validationError = null;
+  
+  if (props.invalid && props.touched ) {
+    inputClasses.push(classes.Invalid);
+
+    if (props.elementConfig.name !== 'postal') validationError = <p>Please enter an alphanumeric item</p>
+  }
+
   switch (props.elementType) {
     case "input":
-      inputElement = <input onChange={props.changed} className={classes.InputElement} {...props.elementConfig} {...props.validation} />;
+      inputElement = <input onChange={props.changed} className={inputClasses.join(' ')} {...props.elementConfig} {...props.validation} />;
       break;
     case "textarea":
-      inputElement = <textarea onChange={props.changed} className={classes.InputElement} {...props.elementConfig} {...props.validation} />;
+      inputElement = <textarea onChange={props.changed} className={inputClasses.join(' ')} {...props.elementConfig} {...props.validation} />;
       break;
     case "select":
       const options = (props.elementConfig.options).map((option) => {
@@ -30,6 +39,7 @@ const Input = (props) => {
     <div className={classes.Input}>
       <label className={classes.Label}>{props.label}</label>
       {inputElement}
+      {validationError}
     </div>
   );
 };
