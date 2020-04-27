@@ -28,5 +28,5 @@
 }
 
 .Disabled:hover {
-  cursor: no-drop;  
+  cursor: not-allowed;  
 }
