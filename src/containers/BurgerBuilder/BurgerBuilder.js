@@ -14,7 +14,7 @@ class BurgerBuilder extends Component {
   state = {
     purchasing: false,
     loading: false,
-    error: false,
+    error: false
   };
 
   // componentDidMount() {
@@ -47,33 +47,6 @@ class BurgerBuilder extends Component {
     //     this.props.err(true, error.message);
     //   });
   // }
-
-  // changeIngredientHandler = (e, type) => {
-  //   const changeValue = e.target.innerText;
-  //   const ingredient = type;
-
-  //   this.setState((prevState) => {
-  //     const ingredients = { ...prevState.ingredients };
-  //     let totalPrice = prevState.totalPrice;
-
-  //     switch (changeValue) {
-  //       case "Less":
-  //         if (ingredients[ingredient] >= 1) {
-  //           ingredients[ingredient] = ingredients[ingredient] - 1;
-  //           totalPrice -= INGREDIENT_PRICES[ingredient];
-  //         }
-  //         break;
-  //       case "More":
-  //         ingredients[ingredient] = ingredients[ingredient] + 1;
-  //         totalPrice += INGREDIENT_PRICES[ingredient];
-  //         break;
-  //       default:
-  //         break;
-  //     }
-
-  //     return { ingredients, totalPrice };
-  //   });
-  // };
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });

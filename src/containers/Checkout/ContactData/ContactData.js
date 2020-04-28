@@ -133,6 +133,7 @@ class ContactData extends Component {
   };
 
   submitOrder = (order) => {
+    console.log('ContactData props:', this.props)
     // firebase endpoint, so use .json extension
     this.setState({ loading: true });
 
