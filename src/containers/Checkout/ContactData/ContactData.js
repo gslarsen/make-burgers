@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import Input from "../../../components/UI/Input/Input";
+import * as actionTypes from '../../../store/actions';
 
 class ContactData extends Component {
   // this state is a template to enable form creation and holds the 'value' for each item in the order form,
@@ -107,7 +109,7 @@ class ContactData extends Component {
 
   orderHandler = (e) => {
     e.preventDefault();
-
+    console.log('Contact Data props:', this.props)
     const orderFormEntryValidity = Object.values(this.state.orderForm)
       .map((element) => {
         return [element.elementConfig.name, element.valid];
@@ -139,11 +141,12 @@ class ContactData extends Component {
       .post("/orders.json", order)
       .then((response) => {
         this.setState({ loading: false });
+        this.props.removeIngredients();
         this.props.history.push("/", {});
       })
       .catch((error) => {
         this.setState({ loading: false });
-        this.props.err(true, error.message);
+        // this.props.err(true, error.message);
       });
   };
 
@@ -217,4 +220,18 @@ class ContactData extends Component {
   }
 }
 
-export default ContactData;
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients,
+    totalPrice: state.totalPrice,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeIngredients: () => dispatch({ type: actionTypes.CLEAR_INGREDIENTS })
+    
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
