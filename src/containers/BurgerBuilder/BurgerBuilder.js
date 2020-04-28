@@ -10,24 +10,14 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../containers/withErrorHandler/withErrorHandler";
 import * as actionTypes from "../../store/actions";
 
-const INGREDIENT_PRICES = {
-  lettuce: 0.5,
-  tomato: 0.5,
-  cheese: 0.4,
-  meat: 1.3,
-  bacon: 0.7,
-};
-
 class BurgerBuilder extends Component {
   state = {
-    // ingredients: null,
-    // totalPrice: 4,
     purchasing: false,
     loading: false,
     error: false,
   };
 
-  componentDidMount() {
+  // componentDidMount() {
     // if (this.props.location.search && this.props.location.state) {
     //   const ingredients = this.props.location.search
     //     .substr(1)
@@ -56,34 +46,34 @@ class BurgerBuilder extends Component {
     //     this.setState({ error: true });
     //     this.props.err(true, error.message);
     //   });
-  }
+  // }
 
-  changeIngredientHandler = (e, type) => {
-    const changeValue = e.target.innerText;
-    const ingredient = type;
+  // changeIngredientHandler = (e, type) => {
+  //   const changeValue = e.target.innerText;
+  //   const ingredient = type;
 
-    this.setState((prevState) => {
-      const ingredients = { ...prevState.ingredients };
-      let totalPrice = prevState.totalPrice;
+  //   this.setState((prevState) => {
+  //     const ingredients = { ...prevState.ingredients };
+  //     let totalPrice = prevState.totalPrice;
 
-      switch (changeValue) {
-        case "Less":
-          if (ingredients[ingredient] >= 1) {
-            ingredients[ingredient] = ingredients[ingredient] - 1;
-            totalPrice -= INGREDIENT_PRICES[ingredient];
-          }
-          break;
-        case "More":
-          ingredients[ingredient] = ingredients[ingredient] + 1;
-          totalPrice += INGREDIENT_PRICES[ingredient];
-          break;
-        default:
-          break;
-      }
+  //     switch (changeValue) {
+  //       case "Less":
+  //         if (ingredients[ingredient] >= 1) {
+  //           ingredients[ingredient] = ingredients[ingredient] - 1;
+  //           totalPrice -= INGREDIENT_PRICES[ingredient];
+  //         }
+  //         break;
+  //       case "More":
+  //         ingredients[ingredient] = ingredients[ingredient] + 1;
+  //         totalPrice += INGREDIENT_PRICES[ingredient];
+  //         break;
+  //       default:
+  //         break;
+  //     }
 
-      return { ingredients, totalPrice };
-    });
-  };
+  //     return { ingredients, totalPrice };
+  //   });
+  // };
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });

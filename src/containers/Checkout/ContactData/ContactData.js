@@ -109,7 +109,6 @@ class ContactData extends Component {
 
   orderHandler = (e) => {
     e.preventDefault();
-    console.log('Contact Data props:', this.props)
     const orderFormEntryValidity = Object.values(this.state.orderForm)
       .map((element) => {
         return [element.elementConfig.name, element.valid];
