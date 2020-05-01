@@ -6,7 +6,7 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import Input from "../../../components/UI/Input/Input";
-import * as actionTypes from '../../../store/actions';
+import * as actionTypes from '../../../store/actions/actionTypes';
 
 class ContactData extends Component {
   // this state is a template to enable form creation and holds the 'value' for each item in the order form,

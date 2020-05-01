@@ -7,6 +7,7 @@ import ContactData from "./ContactData/ContactData";
 
 class Checkout extends Component {
   checkoutCancelledHandler = () => {
+    console.log('[Checkout] cancelled handler ingredients:', this.props.ingredients)
     this.props.history.push({
       pathname: "/"
     });

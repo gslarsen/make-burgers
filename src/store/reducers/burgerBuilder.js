@@ -1,4 +1,5 @@
-import * as actionTypes from "./actions";
+import * as actionTypes from "../actions/actionTypes";
+// import withErrorHandler from '../../containers/withErrorHandler/withErrorHandler';
 
 const INGREDIENT_PRICES = {
   lettuce: 0.5,
@@ -9,12 +10,19 @@ const INGREDIENT_PRICES = {
 };
 
 const initialState = {
-  ingredients: { lettuce: 0, tomato: 0, bacon: 0, cheese: 0, meat: 0 },
+  ingredients: null,
   totalPrice: 4,
+  error: false,
+  errorMsg: null
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.SET_INGREDIENTS:
+      return {...state, ingredients: action.ingredients, error: false, errorMsg: null};
+    case actionTypes.FETCH_INGREDIENTS_FAILED:
+      // this.props.err(true, action.errorMsg); // load error msg modal
+      return {...state, error: true, errorMsg: action.errorMsg};
     case actionTypes.ADD_INGREDIENT:
       return {
         ...state,
