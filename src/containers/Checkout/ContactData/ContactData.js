@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import Input from "../../../components/UI/Input/Input";
-import * as actionTypes from '../../../store/actions/actionTypes';
+import withErrorHandler from "../../withErrorHandler/withErrorHandler";
+import * as actionTypes from "../../../store/actions/actionTypes";
+import * as actions from "../../../store/actions/index";
 
 class ContactData extends Component {
   // this state is a template to enable form creation and holds the 'value' for each item in the order form,
@@ -27,7 +29,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       email: {
         elementType: "input",
@@ -42,7 +44,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       street: {
         elementType: "input",
@@ -57,7 +59,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       postal: {
         elementType: "input",
@@ -71,10 +73,10 @@ class ContactData extends Component {
         validation: {
           required: true,
           minLength: 5,
-          maxLength: 7
+          maxLength: 7,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       country: {
         elementType: "input",
@@ -89,7 +91,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       delivery: {
         elementType: "select",
@@ -104,51 +106,62 @@ class ContactData extends Component {
         value: "Standard",
       },
     },
-    loading: false,
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.error !== this.props.error) {
+      this.props.err(true, this.props.errorMsg);
+    }
+  }
 
   orderHandler = (e) => {
     e.preventDefault();
-    const orderFormEntryValidity = Object.values(this.state.orderForm)
-      .map((element) => {
+    const orderFormEntryValidity = Object.values(this.state.orderForm).map(
+      (element) => {
         return [element.elementConfig.name, element.valid];
-      })
-    
-    const invalidOrderFormEntries = orderFormEntryValidity.filter(element => element[1] === false);
+      }
+    );
+
+    const invalidOrderFormEntries = orderFormEntryValidity.filter(
+      (element) => element[1] === false
+    );
 
     if (invalidOrderFormEntries.length > 0) return;
-
-    else this.submitOrder({
-      customer: {
-        name: this.state.orderForm.name.value,
-        email: this.state.orderForm.email.value,
-        street: this.state.orderForm.street.value,
-        postal: this.state.orderForm.postal.value,
-        country: this.state.orderForm.country.value,
-      },
-      totalPrice: this.props.totalPrice,
-      ingredients: this.props.ingredients,
-      deliveryMethod: this.state.orderForm.delivery.value,
-    });
+    else
+      this.props.submitOrder(
+        {
+          customer: {
+            name: this.state.orderForm.name.value,
+            email: this.state.orderForm.email.value,
+            street: this.state.orderForm.street.value,
+            postal: this.state.orderForm.postal.value,
+            country: this.state.orderForm.country.value,
+          },
+          totalPrice: this.props.totalPrice,
+          ingredients: this.props.ingredients,
+          deliveryMethod: this.state.orderForm.delivery.value,
+        },
+        this.props
+      );
   };
 
-  submitOrder = (order) => {
-    console.log('ContactData props:', this.props)
-    // firebase endpoint, so use .json extension
-    this.setState({ loading: true });
+  // submitOrder = (order) => {
+  //   console.log('ContactData props:', this.props)
+  //   // firebase endpoint, so use .json extension
+  //   this.setState({ loading: true });
 
-    axios
-      .post("/orders.json", order)
-      .then((response) => {
-        this.setState({ loading: false });
-        this.props.removeIngredients();
-        this.props.history.push("/", {});
-      })
-      .catch((error) => {
-        this.setState({ loading: false });
-        // this.props.err(true, error.message);
-      });
-  };
+  //   axios
+  //     .post("/orders.json", order)
+  //     .then((response) => {
+  //       this.setState({ loading: false });
+  //       this.props.removeIngredients();
+  //       this.props.history.push("/", {});
+  //     })
+  //     .catch((error) => {
+  //       this.setState({ loading: false });
+  //       // this.props.err(true, error.message);
+  //     });
+  // };
 
   inputChangedHandler = (e) => {
     //note this is not a deep clone -> see the state.orderForm[e.target.name].elementConfig, but we're only setting state on the value property here.
@@ -167,7 +180,6 @@ class ContactData extends Component {
   };
 
   checkValidity = (value, rules) => {
-
     if (rules.required) {
       if (value.trim() === "") return false;
     }
@@ -183,12 +195,13 @@ class ContactData extends Component {
     const invalidOrderFormEntries = Object.values(this.state.orderForm)
       .map((element) => {
         return [element.elementConfig.name, element.valid];
-      }).filter(element => element[1] === false);
-    
-    let buttonType = 'Success';
-    let buttonDisabled = invalidOrderFormEntries.length === 0 ? false : true; 
-    if (buttonDisabled) buttonType = 'Disabled';
-    
+      })
+      .filter((element) => element[1] === false);
+
+    let buttonType = "Success";
+    let buttonDisabled = invalidOrderFormEntries.length === 0 ? false : true;
+    if (buttonDisabled) buttonType = "Disabled";
+
     let formInputs = Object.values(this.state.orderForm).map((element) => {
       return (
         <Input
@@ -208,30 +221,54 @@ class ContactData extends Component {
         <h4>Enter your contact info</h4>
         <form onSubmit={this.orderHandler}>
           {formInputs}
-          <Button btnType={buttonType} clicked={() => {}} disabled={buttonDisabled}>
+          <Button
+            btnType={buttonType}
+            clicked={() => {}}
+            disabled={buttonDisabled}
+          >
             ORDER
           </Button>
         </form>
       </div>
     );
 
-    if (this.state.loading) output = <Spinner />;
+    if (this.props.error) {
+      output = (
+        <div style={{ textAlign: "center" }}>
+          <p>
+            Apologies! There was a {this.props.errorMsg} error submitting the
+            order.
+          </p>
+          <p>
+            Please select 'CANCEL' and try again - your order is still there!
+          </p>
+        </div>
+      );
+    }
+
+    if (this.props.loading) output = <Spinner />;
     return output;
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice,
+    ingredients: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    loading: state.order.loading,
+    error: state.order.error,
+    errorMsg: state.order.errorMsg,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeIngredients: () => dispatch({ type: actionTypes.CLEAR_INGREDIENTS })
-    
+    submitOrder: (order, props) =>
+      dispatch(actions.purchaseBurger(order, props)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData));

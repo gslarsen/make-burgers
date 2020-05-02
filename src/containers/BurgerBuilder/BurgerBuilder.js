@@ -7,7 +7,7 @@ import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../containers/withErrorHandler/withErrorHandler";
-import * as burgerBuilderActions from "../../store/actions/index";
+import * as actions from "../../store/actions/index";
 
 class BurgerBuilder extends Component {
   state = {
@@ -34,10 +34,8 @@ class BurgerBuilder extends Component {
 
   purchaseContinueHandler = (btnType) => {
     // go to /checkout and pass props: ingredients and totalPrice
-    this.props.history.push("/checkout", {
-      ingredients: this.props.ingredients,
-      totalPrice: this.props.totalPrice,
-    });
+    console.log('[BurgerBuilder] purchaseContinueHandler props:', this.props)
+    this.props.history.push("/checkout");
   };
 
   render() {
@@ -89,18 +87,18 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice,
-    error: state.error,
-    errorMsg: state.errorMsg,
+    ingredients: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error,
+    errorMsg: state.burgerBuilder.errorMsg,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     changeIngredientHandler: (e, ingredient) =>
-      dispatch(burgerBuilderActions.changeIngredient(e, ingredient)),
-    onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
+      dispatch(actions.changeIngredient(e, ingredient)),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
   };
 };
 
