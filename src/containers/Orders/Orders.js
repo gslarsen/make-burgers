@@ -1,41 +1,69 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import Order from "../../components/Order/Order";
-import axios from '../../axios-orders';
-import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../withErrorHandler/withErrorHandler';
+import axios from "../../axios-orders";
+import Spinner from "../../components/UI/Spinner/Spinner";
+import withErrorHandler from "../withErrorHandler/withErrorHandler";
+import * as actions from "../../store/actions/index";
 
 class Orders extends Component {
-
-  state = {
-    orders: {},
-    error: null,
-    loading: true
-  }
+  // state = {
+  //   orders: {},
+  //   error: null,
+  //   loading: true
+  // }
 
   componentDidMount() {
-    axios
-      .get("/orders.json")
-      .then((res) => {
-        const orders = res.data;
-        this.setState({ orders, loading: false });
-      })
-      .catch((error) => {
-        this.setState({ error: true, loading: false});
-        this.props.err(true, error.message);
-      });
+    this.props.fetchOrders();
   }
 
   render() {
     let orders;
 
-    if (this.state.loading) orders = <Spinner />;
-    else orders = Object.entries(this.state.orders).map((order, idx) => {
-      return <Order key={order[0]} orderId={order[0]} ingredients={order[1].ingredients} totalPrice={order[1].totalPrice}/>
-    });
-    
-    return this.state.error ? <h4 style={{textAlign: 'center'}}>Sorry, there was an error getting orders.</h4> : <div>{orders}</div>;
+    if (this.props.loading) orders = <Spinner />;
+    else if (this.props.error) {
+      orders = (
+        <h4 style={{ textAlign: "center" }}>
+          Apologies! There was a problem fetching the orders.
+        </h4>
+      );
+    } else if (this.props.orders.length > 0) {
+      orders = this.props.orders.map((order, idx) => {
+        return (
+          <Order
+            key={order.orderId}
+            orderId={order.orderId}
+            ingredients={order.ingredients}
+            totalPrice={order.totalPrice}
+          />
+        );
+      });
+    } else orders = (
+      <h4 style={{ textAlign: "center" }}>
+        There aren't any orders yet!
+      </h4>
+    );
+    return orders;
   }
 }
 
-export default withErrorHandler(Orders);
+const mapStateToProps = (state) => {
+  return {
+    orders: state.order.orders,
+    loading: state.order.loading,
+    error: state.order.error,
+    errorMsg: state.order.errorMsg,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchOrders: () => dispatch(actions.fetchOrders()),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(Orders));
