@@ -145,24 +145,6 @@ class ContactData extends Component {
       );
   };
 
-  // submitOrder = (order) => {
-  //   console.log('ContactData props:', this.props)
-  //   // firebase endpoint, so use .json extension
-  //   this.setState({ loading: true });
-
-  //   axios
-  //     .post("/orders.json", order)
-  //     .then((response) => {
-  //       this.setState({ loading: false });
-  //       this.props.removeIngredients();
-  //       this.props.history.push("/", {});
-  //     })
-  //     .catch((error) => {
-  //       this.setState({ loading: false });
-  //       // this.props.err(true, error.message);
-  //     });
-  // };
-
   inputChangedHandler = (e) => {
     //note this is not a deep clone -> see the state.orderForm[e.target.name].elementConfig, but we're only setting state on the value property here.
     const orderForm = { ...this.state.orderForm };
