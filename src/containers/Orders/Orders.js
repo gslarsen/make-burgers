@@ -7,9 +7,14 @@ import withErrorHandler from "../withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
 
 class Orders extends Component {
-
   componentDidMount() {
-    this.props.fetchOrders();
+    this.props.fetchOrders(this.props.token);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.error !== this.props.error) {
+      if(this.props.error) this.props.err(true, this.props.errorMsg);
+    }
   }
 
   render() {
@@ -17,11 +22,18 @@ class Orders extends Component {
 
     if (this.props.loading) orders = <Spinner />;
     else if (this.props.error) {
-      orders = (
-        <h4 style={{ textAlign: "center" }}>
-          Apologies! There was a problem fetching the orders.
-        </h4>
-      );
+      if (this.props.errorMsg.includes("401"))
+        orders = (
+          <h4 style={{ textAlign: "center" }}>
+            Please login to get your orders.
+          </h4>
+        );
+      else
+        orders = (
+          <h4 style={{ textAlign: "center" }}>
+            Apologies! There was a problem fetching the orders.
+          </h4>
+        );
     } else if (this.props.orders.length > 0) {
       orders = this.props.orders.map((order, idx) => {
         return (
@@ -33,11 +45,10 @@ class Orders extends Component {
           />
         );
       });
-    } else orders = (
-      <h4 style={{ textAlign: "center" }}>
-        There aren't any orders yet!
-      </h4>
-    );
+    } else
+      orders = (
+        <h4 style={{ textAlign: "center" }}>There aren't any orders yet!</h4>
+      );
     return orders;
   }
 }
@@ -48,12 +59,13 @@ const mapStateToProps = (state) => {
     loading: state.order.loading,
     error: state.order.error,
     errorMsg: state.order.errorMsg,
+    token: state.auth.token
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchOrders: () => dispatch(actions.fetchOrders()),
+    fetchOrders: (token) => dispatch(actions.fetchOrders(token)),
   };
 };
 

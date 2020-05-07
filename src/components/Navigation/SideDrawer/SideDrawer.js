@@ -14,7 +14,7 @@ const SideDrawer = (props) => {
       <div className={classes.SideDrawer + " " + showClass}>
         <Logo height="11%" marginBottom="32px" />
         <nav>
-          <NavigationItems />
+          <NavigationItems loggedIn={props.loggedIn}/>
         </nav>
       </div>
     </Fragment>

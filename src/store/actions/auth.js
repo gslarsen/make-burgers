@@ -22,6 +22,20 @@ export const authFail = (error) => {
   };
 };
 
+export const logout = () => {
+  return {
+    type: actionTypes.AUTH_LOGOUT
+  };
+};
+
+export const checkAuthTimeout = (expirationTime) => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(logout());
+    },expirationTime * 1000); // the expiresIn time returned by firebase is in seconds
+  };
+};
+
 export const auth = (email, password, isSignup) => {
   return (dispatch) => {
     dispatch(authStart());
@@ -40,7 +54,9 @@ export const auth = (email, password, isSignup) => {
     axios
       .post(url, authData)
       .then((response) => {
+        console.log(response); 
         dispatch(authSuccess(response.data));
+        dispatch(checkAuthTimeout(response.data.expiresIn))
       })
       .catch((err) => {
         console.log("ERROR:", err.response.data.error);

@@ -213,7 +213,17 @@ class ContactData extends Component {
     );
 
     if (this.props.error) {
-      output = (
+      if (this.props.errorMsg.includes("401")) output = (
+        <div style={{ textAlign: "center" }}>
+          <p>
+            Apologies! {this.props.errorMsg}
+          </p>
+          <p>
+            Please login and try again - your order is still there!
+          </p>
+        </div>
+      ) 
+      else output = (
         <div style={{ textAlign: "center" }}>
           <p>
             Apologies! There was a {this.props.errorMsg} error submitting the
@@ -238,6 +248,7 @@ const mapStateToProps = (state) => {
     loading: state.order.loading,
     error: state.order.error,
     errorMsg: state.order.errorMsg,
+    token: state.auth.token
   };
 };
 

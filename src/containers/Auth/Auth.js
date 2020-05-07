@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
-import Spinner from '../../components/UI/Spinner/Spinner';
+import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Auth.module.css";
 import * as actions from "../../store/actions/index";
-import reducer from "../../store/reducers/auth";
 
 class Auth extends Component {
   state = {
@@ -42,6 +41,10 @@ class Auth extends Component {
     },
     isSignup: true,
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.isAuthenticated) this.props.history.push("/");
+  }
 
   checkValidity(value, rules) {
     let isValid = true;
@@ -104,8 +107,9 @@ class Auth extends Component {
   switchAuthModeHandler = () => {
     this.setState((prevState) => {
       return {
-      isSignup: !prevState.isSignup
-    }});
+        isSignup: !prevState.isSignup,
+      };
+    });
   };
 
   render() {
@@ -130,10 +134,26 @@ class Auth extends Component {
       />
     ));
 
-    if (this.props.loading) form = <Spinner />
+    if (this.props.loading) form = <Spinner />;
 
     let errorMsg = null;
-    if (this.props.error) errorMsg = <p style={{color: "red"}}>{this.props.error.replace(/([A-Z]{1})([A-Z]+)(_)([A-Z]{1})([A-Z]+)(_?)([A-Z]?)([A-Z]*)/, (match, p1, p2, p3, p4, p5, p6, p7, p8) => p1 + p2.toLowerCase() + " " + p4 + p5.toLowerCase() + " " + p7 + p8.toLowerCase())}</p>;
+    if (this.props.error)
+      errorMsg = (
+        <p style={{ color: "red" }}>
+          {this.props.error.replace(
+            /([A-Z]{1})([A-Z]+)(_)([A-Z]{1})([A-Z]+)(_?)([A-Z]?)([A-Z]*)/,
+            (match, p1, p2, p3, p4, p5, p6, p7, p8) =>
+              p1 +
+              p2.toLowerCase() +
+              " " +
+              p4 +
+              p5.toLowerCase() +
+              " " +
+              p7 +
+              p8.toLowerCase()
+          )}
+        </p>
+      );
 
     return (
       <div className={classes.Auth}>
@@ -144,22 +164,26 @@ class Auth extends Component {
             Submit
           </Button>
         </form>
-        <Button btnType="Danger" clicked={this.switchAuthModeHandler}>SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
+        <Button btnType="Danger" clicked={this.switchAuthModeHandler}>
+          SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
+        </Button>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
+    isAuthenticated: state.auth.token,
     loading: state.auth.loading,
-    error: state.auth.error
+    error: state.auth.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
+    onAuth: (email, password, isSignup) =>
+      dispatch(actions.auth(email, password, isSignup)),
   };
 };
 
