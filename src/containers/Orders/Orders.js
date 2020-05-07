@@ -8,7 +8,10 @@ import * as actions from "../../store/actions/index";
 
 class Orders extends Component {
   componentDidMount() {
-    this.props.fetchOrders(this.props.token);
+    let token = localStorage.getItem('token');
+    if (this.props.token) token = this.props.token;
+
+    if (token) this.props.fetchOrders(token);
   }
 
   componentDidUpdate(prevProps, prevState) {

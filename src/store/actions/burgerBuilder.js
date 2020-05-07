@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import axios from '../../axios-orders';
+import axios from "../../axios-orders";
 
 export const changeIngredient = (e, ingredient) => {
   let type =
@@ -9,18 +9,24 @@ export const changeIngredient = (e, ingredient) => {
   return { type, ingredient };
 };
 
+export const clearIngredients = () => {
+  return {
+    type: actionTypes.CLEAR_INGREDIENTS,
+  };
+};
+
 export const setIngredients = (ingredients) => {
   return {
     type: actionTypes.SET_INGREDIENTS,
-    ingredients
+    ingredients,
   };
 };
 
 export const fetchIngredientsFailed = (errorMsg) => {
   return {
     type: actionTypes.FETCH_INGREDIENTS_FAILED,
-    errorMsg
-  }
+    errorMsg,
+  };
 };
 
 export const initIngredients = () => {

@@ -33,9 +33,8 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = (btnType) => {
-    // go to /checkout and pass props: ingredients and totalPrice
-    console.log('[BurgerBuilder] purchaseContinueHandler props:', this.props)
-    this.props.history.push("/checkout");
+    if (this.props.isAuthenticated) this.props.history.push("/checkout");
+    else this.props.history.push("/auth");
   };
 
   render() {
@@ -91,6 +90,7 @@ const mapStateToProps = (state) => {
     totalPrice: state.burgerBuilder.totalPrice,
     error: state.burgerBuilder.error,
     errorMsg: state.burgerBuilder.errorMsg,
+    isAuthenticated: state.auth.token || null
   };
 };
 
@@ -106,3 +106,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withErrorHandler(BurgerBuilder));
+
+

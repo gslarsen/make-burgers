@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+  
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
@@ -39,11 +39,19 @@ class Auth extends Component {
         touched: false,
       },
     },
-    isSignup: true,
+    isSignup: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.isAuthenticated) this.props.history.push("/");
+    // debugger;
+    const sumOfIngredients = Object.values(this.props.ingredients).reduce((acc, ingredientQty) => {
+      return acc + ingredientQty;
+    },0);
+
+    if (this.props.isAuthenticated) {
+      if (sumOfIngredients) this.props.history.push("/checkout");
+      else this.props.history.push("/");
+    }
   }
 
   checkValidity(value, rules) {
@@ -154,7 +162,7 @@ class Auth extends Component {
           )}
         </p>
       );
-
+    
     return (
       <div className={classes.Auth}>
         <form onSubmit={this.submitHandler}>
@@ -174,9 +182,10 @@ class Auth extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.auth.token,
+    isAuthenticated: state.auth.token || null,
     loading: state.auth.loading,
     error: state.auth.error,
+    ingredients: state.burgerBuilder.ingredients
   };
 };
 
