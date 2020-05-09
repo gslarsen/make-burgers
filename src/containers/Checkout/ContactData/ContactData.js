@@ -129,6 +129,7 @@ class ContactData extends Component {
       this.props.submitOrder(
         {
           customer: {
+            userId: this.props.userId,
             name: this.state.orderForm.name.value,
             email: this.state.orderForm.email.value,
             street: this.state.orderForm.street.value,
@@ -248,7 +249,8 @@ const mapStateToProps = (state) => {
     loading: state.order.loading,
     error: state.order.error,
     errorMsg: state.order.errorMsg,
-    token: state.auth.token
+    token: state.auth.token,
+    userId: state.auth.userId
   };
 };
 

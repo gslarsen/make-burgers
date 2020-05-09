@@ -42,18 +42,6 @@ class Auth extends Component {
     isSignup: false,
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    // debugger;
-    const sumOfIngredients = Object.values(this.props.ingredients).reduce((acc, ingredientQty) => {
-      return acc + ingredientQty;
-    },0);
-
-    if (this.props.isAuthenticated) {
-      if (sumOfIngredients) this.props.history.push("/checkout");
-      else this.props.history.push("/");
-    }
-  }
-
   checkValidity(value, rules) {
     let isValid = true;
     if (!rules) {

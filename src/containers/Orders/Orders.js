@@ -9,9 +9,11 @@ import * as actions from "../../store/actions/index";
 class Orders extends Component {
   componentDidMount() {
     let token = localStorage.getItem('token');
-    if (this.props.token) token = this.props.token;
+    let userId = localStorage.getItem('localId');
 
-    if (token) this.props.fetchOrders(token);
+    if (this.props.token) {token = this.props.token; userId = this.props.userId}
+
+    if (token) this.props.fetchOrders(token, userId);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -62,13 +64,14 @@ const mapStateToProps = (state) => {
     loading: state.order.loading,
     error: state.order.error,
     errorMsg: state.order.errorMsg,
-    token: state.auth.token
+    token: state.auth.token,
+    userId: state.auth.userId
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchOrders: (token) => dispatch(actions.fetchOrders(token)),
+    fetchOrders: (token, userId) => dispatch(actions.fetchOrders(token, userId)),
   };
 };
 

@@ -35,14 +35,9 @@ export const purchaseBurger = (orderData, props) => {
         dispatch(purchaseBurgerSuccess(response.data.name, orderData));
         dispatch(clearOrder());
         props.history.push("/", {});
-        // this.setState({ loading: false });
-        // this.props.removeIngredients();
-        // this.props.history.push("/", {});
       })
       .catch((error) => {
         dispatch(purchaseBurgerFail(error.message));
-        // this.setState({ loading: false });
-        // this.props.err(true, error.message);
       });
   };
 };
@@ -67,12 +62,12 @@ export const fetchOrdersStart = () => {
   };
 };
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
   return (dispatch) => {
     dispatch(fetchOrdersStart());
 
     axios
-      .get("/orders.json?auth=" + token)
+      .get("/orders.json?auth=" + token + '&orderBy="customer/userId"&equalTo="' + userId + '"')
       .then((res) => {
         let orders = res.data;
         if (!orders) dispatch(fetchOrdersSuccess([]));
