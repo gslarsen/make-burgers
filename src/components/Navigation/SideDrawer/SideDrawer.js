@@ -11,7 +11,7 @@ const SideDrawer = (props) => {
   return (
     <Fragment>
       <Backdrop show={props.show} modalClosed={props.modalClosed} />
-      <div className={classes.SideDrawer + " " + showClass}>
+      <div onClick={props.modalClosed} className={classes.SideDrawer + " " + showClass}>
         <Logo height="11%" marginBottom="32px" />
         <nav>
           <NavigationItems loggedIn={props.loggedIn}/>
