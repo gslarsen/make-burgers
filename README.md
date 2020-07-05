@@ -1,2 +1,2 @@
-Let's make some burgers!
+Let's create and place orders for some burgers! 
 
